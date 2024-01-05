@@ -26,9 +26,9 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link" aria-current="page" href="#">Главная</a>
-                        <a class="nav-link" href="#">О компании</a>
+                        <a class="nav-link" aria-current="page" href="#">О компании</a>
                         <a class="nav-link" href="#">Экскурсии</a>
+                        <a class="nav-link" href="#">Гиды</a>
                     </div>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                 </div>
             </div>
         </div>
-        <div class="container px-4 py-5">
+        <div class="container px-4 py-5 border-bottom">
             <h2 class="pb-2 border-bottom">Наши преимущества</h2>
             <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
                 <div class = "feature col">
@@ -104,6 +104,71 @@
                         <p>Простая система заказа онлайн с широким выбором доступных опций.</p>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div id="map" class = "container px-4 py-5 border-bottom">
+            <script src="https://mapgl.2gis.com/api/js/v1"></script>
+            <script>
+                const map = new mapgl.Map('map', {
+                    center: [37.617778, 55.755834],
+                    zoom: 13,
+                    key: '',
+                });
+            </script>
+        </div>
+        <div class = "container px-4 py-5">
+            <h2 class="pb-2">Экскурсии</h2>
+            <div class="pb-3 d-flex flex-row gap-5 text-nowrap">
+                <div class="position-relative">
+                    <label class="form-label" for="inputName">Поиск экскурсий</label>
+                    <input class="form-control" id="inputName" placeholder="Название экскурсии" required type="text">
+                </div>
+                <div class="position-relative">
+                    <label class="form-label" for="selectorPlace">Выберите место</label>
+                    <select class="form-select" id="selectorPlace" onchange="applyRouteSearchFilters()">
+                        <option value="notSearch">Не выбрано</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <table class="table table-bordered table-hover table-sm" id="routes">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Описание</th>
+                            <th>Места</th>
+                            <th>Записаться</th>
+                        </tr>
+                    </thead>
+                    <tbody id="routesBody"></tbody>
+                </table>
+            </div>
+            <div class="container d-flex justify-content-center">
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" id="prev" onclick="slideTable(-1)">Previous</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link active" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item" aria-current="page">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">4</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" id="next" onclick="slideTable(1)">Next</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </main>
