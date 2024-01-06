@@ -73,29 +73,32 @@ function fillGuidesTable(){
     for (let i = 0; i < currentGuidesArray.length; i++) {
         let row = tbody.insertRow();
 
-        let cellRadio = row.insertCell(0);
-        let radiobutton = document.createElement("input");
-        radiobutton.type = "radio";
-        radiobutton.name = "radioGroup";
-        radiobutton.id = currentGuidesArray[i].id.toString();
-        radiobutton.setAttribute("guide-id", currentGuidesArray[i].id.toString());
-        cellRadio.appendChild(radiobutton);
+        let name = row.insertCell(0);
 
-        let name = row.insertCell(1);
         name.innerText = currentGuidesArray[i].name.toString();
-        let language = row.insertCell(2);
+        let language = row.insertCell(1);
         language.innerText = currentGuidesArray[i].language.toString();
-        let workExperience = row.insertCell(3);
+        let workExperience = row.insertCell(2);
         workExperience.innerText = currentGuidesArray[i].workExperience.toString();
-        let pricePerHour = row.insertCell(4);
+        let pricePerHour = row.insertCell(3);
         pricePerHour.innerText = currentGuidesArray[i].pricePerHour.toString();
+
+        let cellButton = row.insertCell(4);
+        let button = document.createElement("button");
+        button.type = "button";
+        button.className = "btn btn-primary";
+        button.setAttribute("data-bs-toggle", "modal");
+        button.setAttribute("data-bs-target", "#purchaseModal");
+        button.textContent = "Выбрать";
+        button.setAttribute("guide-id", currentGuidesArray[i].id);
+        cellButton.appendChild(button);
     }
 }
 
 function fillOptionSelector(){
     let selector = document.getElementById("selectorPlace")
     selector.innerHTML = '';
-    selector.appendChild(createOption("Не выбран"));
+    selector.appendChild(createOption("Не выбрано"));
     let uniqueObjects = getUniqueObjects();
     uniqueObjects.forEach(name => {
         selector.appendChild(createOption(name));
@@ -194,8 +197,6 @@ function fillRoutesTable() {
                 let button = document.createElement("button");
                 button.type = "button";
                 button.className = "btn btn-primary";
-                button.setAttribute("data-bs-toggle", "modal");
-                button.setAttribute("data-bs-target", "#purchaseModal");
                 button.textContent = "Оформить";
                 button.setAttribute("route-id", currentRoutesResponseArray[i].id);
                 button.addEventListener("click", purchaseButtonClick);
@@ -219,6 +220,15 @@ function clickOnPagination(){
 function updatePagination(value) {
     currentPage = value;
     totalCount = currentRoutesResponseArray.length;
+
+    document.getElementById("current-interval-start").innerText = currentPage.toString();
+    let maxPages = currentRoutesResponseArray.length/rowsPerPage;
+    if (Math.floor(maxPages) < maxPages){
+        maxPages = Math.floor(maxPages) + 1;
+    } else {
+        maxPages = Math.floor(maxPages);
+    }
+    document.getElementById("current-interval-end").innerText = maxPages.toString();
 
     let isLastPage = currentPage >= Math.ceil(totalCount / rowsPerPage);
     let isFirstPage = currentPage === 1;

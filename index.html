@@ -144,6 +144,10 @@
                     <tbody id="routesBody"></tbody>
                 </table>
             </div>
+            <div class="container text-center">
+                Страница <span id="current-interval-start">1</span> из
+                <span id="current-interval-end">100</span>
+            </div>
             <div class="container d-flex justify-content-center">
                 <nav>
                     <ul id="pagination" class="pagination" onclick="clickOnPagination()">
@@ -181,17 +185,16 @@
                 <table class="table table-bordered table-hover table-sm" id="guides">
                     <thead>
                     <tr>
-                        <th>Выбор</th>
                         <th>ФИО</th>
                         <th>Языки</th>
                         <th>Опыт</th>
                         <th>Стоимость</th>
+                        <th style="width: 5em">Выбор</th>
                     </tr>
                     </thead>
                     <tbody id="guidesBody"></tbody>
                 </table>
             </div>
-
         </div>
     </main>
     <div class="container">
