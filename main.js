@@ -1,7 +1,6 @@
 api_key = "3556285c-13f0-45b2-b7cf-b39353f1389c"
 let currentRoutesResponseArray
 let AllRoutesResponseArray
-let filteredRoutesResponseArray
 let currentPage = 0;
 let totalCount = 0;
 const rowsPerPage = 5;
@@ -23,6 +22,7 @@ function applyRouteSearchFilters() {
         return route.name.toString().includes(searchedName);
     });
     currentPage = 1;
+    updatePagination(1);
     fillRoutesTable();
 }
 function applyRouteOptionFilters(){
@@ -37,6 +37,7 @@ function applyRouteOptionFilters(){
             return route.mainObject.toString().includes(selectedOption.value);
         });
     }
+    updatePagination(1);
     fillRoutesTable();
 }
 
@@ -46,7 +47,7 @@ function getUniqueObjects() {
     for (let i = 0; i < AllRoutesResponseArray.length; i++){
         let objects = AllRoutesResponseArray[i].mainObject.toString().split(re);
         for (let j = 0; j < objects.length; j++){
-            if (objects[j] !== undefined && objects[j].length > 4){
+            if (objects[j] !== undefined && objects[j].length > 4 && objects[j].length < 25){
                 uniqueObjects.add(objects[j])
             }
         }
@@ -93,6 +94,17 @@ function fillRoutesTable() {
     }
 }
 
+function clickOnPagination(){
+    let listElement = event.target;
+    if (listElement.getElementsByClassName("page-link").length === 0){
+        if (listElement.id === "next" && currentPage < currentRoutesResponseArray.length/rowsPerPage){
+            updatePagination(parseInt(currentPage) + 1);
+        } else if (listElement.id === "prev" && parseInt(currentPage) > 1){
+            updatePagination(parseInt(currentPage) - 1);
+        }
+    }
+}
+
 function updatePagination(value) {
     currentPage = value;
     totalCount = currentRoutesResponseArray.length;
@@ -101,16 +113,17 @@ function updatePagination(value) {
     let isFirstPage = currentPage === 1;
 
     if (isLastPage){
-        document.getElementById("next").className = "page-link disabled"
+        document.getElementById("next").className = "page-link disabled";
     } else{
-        document.getElementById("next").className = "page-link"
+        document.getElementById("next").className = "page-link";
     }
 
     if (isFirstPage){
-        document.getElementById("prev").className = "page-link disabled"
+        document.getElementById("prev").className = "page-link disabled";
     } else {
-        document.getElementById("prev").className = "page-link"
+        document.getElementById("prev").className = "page-link";
     }
+    fillRoutesTable();
 }
 
 

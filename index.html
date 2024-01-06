@@ -146,27 +146,12 @@
             </div>
             <div class="container d-flex justify-content-center">
                 <nav>
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" id="prev" onclick="slideTable(-1)">Предыдущий</a>
+                    <ul id="pagination" class="pagination" onclick="clickOnPagination()">
+                        <li class="page-item cursor-pointer">
+                            <a class="page-link" id="prev"><<< Предыдущая</a>
                         </li>
-                        <li class="page-item">
-                            <a class="page-link active" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item" aria-current="page">
-                            <a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">4</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" id="next" onclick="slideTable(1)">Предыдущий</a>
+                        <li class="page-item cursor-pointer">
+                            <a class="page-link" id="next">Следующая >>></a>
                         </li>
                     </ul>
                 </nav>
