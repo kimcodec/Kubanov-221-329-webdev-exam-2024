@@ -157,6 +157,42 @@
                 </nav>
             </div>
         </div>
+        <div class = "container px-4" style="display: none" id="guideBlock">
+            <h2 class="pb-2">Доступные гиды на маршруте</h2>
+            <div class="pb-3 d-flex flex-row gap-5 text-nowrap">
+                <div class="position-relative col-lg-3">
+                    <label class="form-label" for="selectorPlace">Выберите язык</label>
+                    <select class="form-select" id="guideLanguagePlace" onchange="applyGuideOptionFilters()">
+                        <option value="Не выбрано">Не выбран</option>
+                    </select>
+                </div>
+                <div class="position-relative col-lg-3">
+                    <label class="form-label">Опыт работы</label>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="minExp">От:</label>
+                        <input type="text" class="form-control" id="minExp">
+                        <label class="input-group-text" for="maxExp">До:</label>
+                        <input type="text" class="form-control" id="maxExp">
+                        <button class="btn btn-outline-primary" type="button" id="guideSearch" onclick="applyGuideSearchFilters()">Поиск</button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <table class="table table-bordered table-hover table-sm" id="guides">
+                    <thead>
+                    <tr>
+                        <th>Выбор</th>
+                        <th>ФИО</th>
+                        <th>Языки</th>
+                        <th>Опыт</th>
+                        <th>Стоимость</th>
+                    </tr>
+                    </thead>
+                    <tbody id="guidesBody"></tbody>
+                </table>
+            </div>
+
+        </div>
     </main>
     <div class="container">
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">

@@ -1,18 +1,128 @@
 api_key = "3556285c-13f0-45b2-b7cf-b39353f1389c"
 let currentRoutesResponseArray
 let AllRoutesResponseArray
+let AllGuidesArray
+let currentGuidesArray
 let currentPage = 0;
 let totalCount = 0;
 const rowsPerPage = 5;
 
+function applyGuideOptionFilters(){
+    let selector = document.getElementById("guideLanguagePlace");
+    let selectedOption = selector.options[selector.selectedIndex];
+
+    if (selectedOption.value === "Не выбран"){
+        currentGuidesArray = AllGuidesArray;
+    } else{
+        currentGuidesArray = AllGuidesArray.filter(guide => {
+            return guide.language.toString() === selectedOption.value;
+        });
+    }
+    fillGuidesTable();
+}
+
+function purchaseButtonClick(){
+    document.getElementById("guideBlock").style.display = 'block';
+
+    let guideRows = document.getElementById("routesBody").children;
+    for (let i = 0; i < guideRows.length; i++){
+        guideRows[i].className = "";
+    }
+
+    let rowGuide = event.target.parentNode.parentNode;
+    rowGuide.className = "table-success";
+    let routeId = event.target.getAttribute("route-id");
+    const url = `http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes/${routeId}/guides?api_key=${api_key}`;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    xhr.responseType = "json";
+
+    xhr.send();
+
+    xhr.onload = function () {
+        AllGuidesArray = this.response;
+        currentGuidesArray = AllGuidesArray
+        fillGuidesTable();
+        fillGuidesOptions();
+    }
+}
+
+function fillGuidesOptions(){
+    let selector = document.getElementById("guideLanguagePlace")
+    selector.innerHTML = '';
+    selector.appendChild(createOption("Не выбран"));
+    let uniqueObjects = getUniqueLanguages();
+    uniqueObjects.forEach(name => {
+        selector.appendChild(createOption(name));
+    });
+}
+
+function getUniqueLanguages(){
+    const uniqueLanguages = new Set();
+    for (let i = 0; i < AllGuidesArray.length; i++){
+        uniqueLanguages.add(AllGuidesArray[i].language.toString());
+    }
+    return uniqueLanguages;
+}
+
+function fillGuidesTable(){
+    let tbody = document.getElementById("guidesBody");
+    tbody.innerHTML = "";
+
+    for (let i = 0; i < currentGuidesArray.length; i++) {
+        let row = tbody.insertRow();
+
+        let cellRadio = row.insertCell(0);
+        let radiobutton = document.createElement("input");
+        radiobutton.type = "radio";
+        radiobutton.name = "radioGroup";
+        radiobutton.id = currentGuidesArray[i].id.toString();
+        radiobutton.setAttribute("guide-id", currentGuidesArray[i].id.toString());
+        cellRadio.appendChild(radiobutton);
+
+        let name = row.insertCell(1);
+        name.innerText = currentGuidesArray[i].name.toString();
+        let language = row.insertCell(2);
+        language.innerText = currentGuidesArray[i].language.toString();
+        let workExperience = row.insertCell(3);
+        workExperience.innerText = currentGuidesArray[i].workExperience.toString();
+        let pricePerHour = row.insertCell(4);
+        pricePerHour.innerText = currentGuidesArray[i].pricePerHour.toString();
+    }
+}
+
 function fillOptionSelector(){
     let selector = document.getElementById("selectorPlace")
     selector.innerHTML = '';
-    selector.appendChild(createOption("Не выбрано"));
+    selector.appendChild(createOption("Не выбран"));
     let uniqueObjects = getUniqueObjects();
     uniqueObjects.forEach(name => {
         selector.appendChild(createOption(name));
     });
+}
+
+function applyGuideSearchFilters() {
+    applyGuideOptionFilters();
+
+    let maxExp = parseInt(document.getElementById("maxExp").value);
+    let minExp = parseInt(document.getElementById("minExp").value);
+    console.log(minExp, maxExp)
+    console.log(isNaN(minExp), isNaN(maxExp))
+    if (!isNaN(minExp) && isNaN(maxExp)){
+        currentGuidesArray = currentGuidesArray.filter(guide =>{
+            return parseInt(guide.workExperience) >= minExp;
+        });
+    } else if (isNaN(minExp) && !isNaN(maxExp)){
+        currentGuidesArray = currentGuidesArray.filter(guide =>{
+            return parseInt(guide.workExperience) <= maxExp;
+        });
+    } else if (!isNaN(minExp) && !isNaN(maxExp)){
+        currentGuidesArray = currentGuidesArray.filter(guide =>{
+            return parseInt(guide.workExperience) <= maxExp && parseInt(guide.workExperience) >= minExp;
+        });
+    }
+    fillGuidesTable();
 }
 
 function applyRouteSearchFilters() {
@@ -25,6 +135,7 @@ function applyRouteSearchFilters() {
     updatePagination(1);
     fillRoutesTable();
 }
+
 function applyRouteOptionFilters(){
     let selector = document.getElementById("selectorPlace");
     let selectedOption = selector.options[selector.selectedIndex];
@@ -52,7 +163,7 @@ function getUniqueObjects() {
             }
         }
     }
-    return uniqueObjects
+    return uniqueObjects;
 }
 
 function createOption(content) {
@@ -84,10 +195,10 @@ function fillRoutesTable() {
                 button.type = "button";
                 button.className = "btn btn-primary";
                 button.setAttribute("data-bs-toggle", "modal");
-                button.setAttribute("data-bs-target", "#exampleModal");
+                button.setAttribute("data-bs-target", "#purchaseModal");
                 button.textContent = "Оформить";
                 button.setAttribute("route-id", currentRoutesResponseArray[i].id);
-                /*button.addEventListener("click", detailedButtonClick);*/
+                button.addEventListener("click", purchaseButtonClick);
                 buttons.appendChild(button);
             }
         }
