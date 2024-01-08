@@ -6,6 +6,8 @@ let currentGuidesArray
 let currentPage = 0;
 let totalCount = 0;
 const rowsPerPage = 5;
+let currentRouteId = -1;
+let currentGuideId = -1;
 
 function applyGuideOptionFilters(){
     let selector = document.getElementById("guideLanguagePlace");
@@ -28,10 +30,10 @@ function purchaseButtonClick(){
     for (let i = 0; i < guideRows.length; i++){
         guideRows[i].className = "";
     }
-
     let rowGuide = event.target.parentNode.parentNode;
     rowGuide.className = "table-success";
     let routeId = event.target.getAttribute("route-id");
+    currentRouteId = routeId;
     const url = `http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes/${routeId}/guides?api_key=${api_key}`;
 
     let xhr = new XMLHttpRequest();
@@ -91,8 +93,18 @@ function fillGuidesTable(){
         button.setAttribute("data-bs-target", "#purchaseModal");
         button.textContent = "Выбрать";
         button.setAttribute("guide-id", currentGuidesArray[i].id);
+        button.addEventListener("click", buttonChooseClick);
         cellButton.appendChild(button);
     }
+}
+
+function buttonChooseClick(){
+    currentGuideId = event.target.getAttribute("guide-id");
+    openPurchaseModal();
+}
+
+function openPurchaseModel(){
+
 }
 
 function fillOptionSelector(){
@@ -110,8 +122,6 @@ function applyGuideSearchFilters() {
 
     let maxExp = parseInt(document.getElementById("maxExp").value);
     let minExp = parseInt(document.getElementById("minExp").value);
-    console.log(minExp, maxExp)
-    console.log(isNaN(minExp), isNaN(maxExp))
     if (!isNaN(minExp) && isNaN(maxExp)){
         currentGuidesArray = currentGuidesArray.filter(guide =>{
             return parseInt(guide.workExperience) >= minExp;
@@ -162,7 +172,7 @@ function getUniqueObjects() {
         let objects = AllRoutesResponseArray[i].mainObject.toString().split(re);
         for (let j = 0; j < objects.length; j++){
             if (objects[j] !== undefined && objects[j].length > 4 && objects[j].length < 25){
-                uniqueObjects.add(objects[j])
+                uniqueObjects.add(objects[j]);
             }
         }
     }
@@ -199,6 +209,9 @@ function fillRoutesTable() {
                 button.className = "btn btn-primary";
                 button.textContent = "Оформить";
                 button.setAttribute("route-id", currentRoutesResponseArray[i].id);
+                if (parseInt(currentRouteId) === parseInt(currentRoutesResponseArray[i].id)){
+                    row.className = "table-success";
+                }
                 button.addEventListener("click", purchaseButtonClick);
                 buttons.appendChild(button);
             }
