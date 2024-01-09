@@ -1,4 +1,4 @@
-api_key = "3556285c-13f0-45b2-b7cf-b39353f1389c"
+const api_key = "3556285c-13f0-45b2-b7cf-b39353f1389c"
 let currentRoutesResponseArray
 let AllRoutesResponseArray
 let AllGuidesArray
@@ -282,6 +282,10 @@ function createAlert(msg, type){
         }, 5000);
     }
     appendAlert(msg, type);
+}
+
+function redirectToLK(){
+    window.location.href = "personalAccount.html";
 }
 
 function purchaseSubmitButtonClick(){

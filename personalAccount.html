@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <script src="personalAccount.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Moscow Trip</title>
+</head>
+<body style="background-color: #d2b48c">
+    <header class="fixed-top">
+        <nav class ="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand fs-4 d-none d-md-block">MoscowTrip</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand fs-4 d-lg-none m-1">MoscowTrip</a>
+                <div class="navbar-nav ms-auto">
+                    <button class="btn btn-primary d-lg-none d-md-none text-nowrap mx-2" onclick="redirectToMainPage()">
+                        На главную
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link" aria-current="page" href="index.html">О компании</a>
+                        <a class="nav-link" href="index.html#advantages">Преимущества</a>
+                        <a class="nav-link" href="index.html#routeBlock">Экскурсия</a>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-nav">
+                <button class="btn btn-primary d-none d-md-block text-nowrap mx-2" onclick="redirectToMainPage()">
+                    На главную
+                </button>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container px-4 py-5 pt-5 my-5">
+            <div class = "container">
+                <div id="purchaseAlertPlaceholder"></div>
+            </div>
+            <h2 class="pb-2">Список оформленных экскурсий</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-sm" id="routesPurchase">
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Название</th>
+                        <th>Дата</th>
+                        <th>Стоимость</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="routesPurchaseBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top border-black">
+            <div class="col-md-4 d-flex align-items-center">
+                <span class="mb-3 mb-md-0 text-body-secondary">© 2024 Moscow Trip, Inc</span>
+            </div>
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                <li class="ms-3">
+                    <a class="text-body-secondary" href="#">
+                        <img alt="messenger" src="images/whatsapp.svg" width="24" height="24">
+                    </a>
+                </li>
+                <li class="ms-3">
+                    <a class="text-body-secondary" href="#">
+                        <img alt="messenger" src="images/telegram.svg" width="24" height="24">
+                    </a>
+                </li>
+                <li class="ms-3">
+                    <a class="text-body-secondary" href="#">
+                        <img alt="messenger" src="images/messenger.svg" width="24" height="24">
+                    </a>
+                </li>
+            </ul>
+        </footer>
+    </div>
+
+    <!--Modal-->
+    <div class="modal fade" id="purchaseModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background-color: #d2b48c">
+                <div class="modal-header">
+                    <h5 class="modal-title">Оформление заявки</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body" onchange="calculateAmount()">
+                    <div class="mb-3 d-flex align-items-center" id="modalRouteInfo">
+                        <h6 class="m-0">Название маршрута:</h6>
+                        <p id="modalRouteName" class="m-0 ms-1"></p>
+                    </div>
+
+                    <div class="mb-3 d-flex align-items-center" id="modalGuidInfo">
+                        <h6 class="m-0">ФИО гида:</h6>
+                        <p id="modalGuideName" class="m-0 ms-1"></p>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-lg-4">
+                            <label for="routeDate" class="form-label">Дата экскурсии:</label>
+                            <input type="date" class="form-control" id="routeDate" required/>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <label for="routeStartTime" class="form-label">Время начала экскурсии:</label>
+                            <input type="time" class="form-control" id="routeStartTime" onchange="calculateAmount()" required placeholder="В формате ЧЧ:MM"/>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <label for="routeDuration" class="form-label">Длительность экскурсии:</label>
+                            <select class="form-select" id="routeDuration">
+                                <option value="1">1 час</option>
+                                <option value="2">2 часа</option>
+                                <option value="3">3 часа</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- People Count -->
+                    <div class="mb-3">
+                        <label for="peopleNumber" class="form-label">Количество человек в группе:</label>
+                        <input onchange="checkPeopleNumber()" type="number" class="form-control" id="peopleNumber" min="1" max="20" required/>
+                    </div>
+
+                    <div class="row mb-3">
+                        <h6 class="col-12">Дополнительные опции:</h6>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="firstOption" id="firstOption"/>
+                                <label class="form-check-label fw-bold" for="firstOption">Сопровождение сурдопереводчика</label>
+                                <p class="mt-0"> Увеличивает стоимость на 15%, если посетителей
+                                    от 1 до 5, на 25%, если от 5 до 10. При выборе количества посетителей больше 10,
+                                    данная опция блокируется.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="secondOption" id="secondOption"/>
+                                <label class="form-check-label fw-bold" for="secondOption">Выезд гида в течение часа</label>
+                                <p class="mt-0">Повышает стоимость на 30%</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 d-flex align-items-center" id="modalPriceInfo">
+                        <h6 class="m-0">Итоговая стоимость:</h6>
+                        <p id="totalAmount" class="m-0 ms-1"></p>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ОТМЕНИТЬ</button>
+                        <button type="submit" class="btn btn-primary ms-2" onclick="purchaseSubmitButtonClick()" id="modalPurchaseSubmit" data-bs-dismiss="modal">ОТПРАВИТЬ</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

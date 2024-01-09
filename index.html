@@ -20,7 +20,7 @@
                 </button>
                 <a class="navbar-brand fs-4 d-lg-none m-1">MoscowTrip</a>
                 <div class="navbar-nav ms-auto">
-                    <button class="btn btn-primary d-lg-none d-md-none">
+                    <button class="btn btn-primary d-lg-none d-md-none text-nowrap mx-2" onclick="redirectToLK()">
                         <i class="bi bi-person"></i>
                         Личный кабинет
                     </button>
@@ -28,13 +28,13 @@
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                         <a class="nav-link" aria-current="page" href="#">О компании</a>
-                        <a class="nav-link" href="#">Экскурсии</a>
-                        <a class="nav-link" href="#">Гиды</a>
+                        <a class="nav-link" href="#advantages">Преимущества</a>
+                        <a class="nav-link" href="#routeBlock">Экскурсии</a>
                     </div>
                 </div>
             </div>
             <div class="navbar-nav">
-                <button class="btn btn-primary d-none d-md-block">
+                <button class="btn btn-primary d-none d-md-block text-nowrap mx-2" onclick="redirectToLK()">
                     <i class="bi bi-person"></i>
                     Личный кабинет
                 </button>
@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-        <div class="container px-4 py-5 border-bottom border-dark">
+        <div class="container px-4 py-5 border-bottom border-dark" id = "advantages">
             <h2 class="pb-2 border-bottom border-dark">Наши преимущества</h2>
             <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
                 <div class = "feature col">
@@ -117,7 +117,7 @@
                 });
             </script>
         </div>
-        <div class = "container px-4 py-5">
+        <div class = "container px-4 py-5" id="routeBlock">
             <h2 class="pb-2">Экскурсии</h2>
             <div class="pb-3 d-flex flex-row gap-5 text-nowrap">
                 <div class="position-relative col-lg-3">
@@ -201,7 +201,7 @@
         </div>
     </main>
     <div class="container">
-        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top border-black">
             <div class="col-md-4 d-flex align-items-center">
                 <span class="mb-3 mb-md-0 text-body-secondary">© 2024 Moscow Trip, Inc</span>
             </div>
