@@ -276,6 +276,10 @@ function createAlert(msg, type){
         ].join('');
 
         alertPlaceholder.append(wrapper);
+
+        setTimeout(() => {
+            wrapper.remove();
+        }, 5000);
     }
     appendAlert(msg, type);
 }
