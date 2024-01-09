@@ -131,7 +131,7 @@
                     </select>
                 </div>
             </div>
-            <div>
+            <div class="table-responsive">
                 <table class="table table-bordered table-hover table-sm" id="routes">
                     <thead>
                         <tr>
@@ -181,7 +181,7 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="table-responsive">
                 <table class="table table-bordered table-hover table-sm" id="guides">
                     <thead>
                     <tr>
@@ -221,5 +221,88 @@
             </ul>
         </footer>
     </div>
+
+    <!--Modal-->
+    <div class="modal fade" id="purchaseModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Оформление заявки</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body" onchange="calculateAmount()">
+                    <div class="mb-3 d-flex align-items-center" id="modalRouteInfo">
+                        <h6 class="m-0">Название маршрута:</h6>
+                        <p id="modalRouteName" class="m-0 ms-1"></p>
+                    </div>
+
+                    <div class="mb-3 d-flex align-items-center" id="modalGuidInfo">
+                        <h6 class="m-0">ФИО гида:</h6>
+                        <p id="modalGuideName" class="m-0 ms-1"></p>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-lg-4">
+                            <label for="routeDate" class="form-label">Дата экскурсии:</label>
+                            <input type="date" class="form-control" id="routeDate" required/>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <label for="routeStartTime" class="form-label">Время начала экскурсии:</label>
+                            <input type="time" class="form-control" id="routeStartTime" onchange="calculateAmount()" required placeholder="В формате ЧЧ:MM"/>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <label for="routeDuration" class="form-label">Длительность экскурсии:</label>
+                            <select class="form-select" id="routeDuration">
+                                <option value="1">1 час</option>
+                                <option value="2">2 часа</option>
+                                <option value="3">3 часа</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- People Count -->
+                    <div class="mb-3">
+                        <label for="peopleNumber" class="form-label">Количество человек в группе:</label>
+                        <input onchange="checkPeopleNumber()" type="number" class="form-control" id="peopleNumber" min="1" max="20" required/>
+                    </div>
+
+                    <div class="row mb-3">
+                        <h6 class="col-12">Дополнительные опции:</h6>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="firstOption" id="firstOption"/>
+                                <label class="form-check-label fw-bold" for="firstOption">Сопровождение сурдопереводчика</label>
+                                <p class="mt-0"> Увеличивает стоимость на 15%, если посетителей
+                                    от 1 до 5, на 25%, если от 5 до 10. При выборе количества посетителей больше 10,
+                                    данная опция блокируется.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="secondOption" id="secondOption"/>
+                                <label class="form-check-label fw-bold" for="secondOption">Выезд гида в течение часа</label>
+                                <p class="mt-0">Повышает стоимость на 30%</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 d-flex align-items-center" id="modalPriceInfo">
+                        <h6 class="m-0">Итоговая стоимость:</h6>
+                        <p id="totalAmount" class="m-0 ms-1"></p>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ОТМЕНИТЬ</button>
+                        <button type="submit" class="btn btn-primary ms-2" id="modal-submit" data-bs-dismiss="modal">ОТПРАВИТЬ</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
