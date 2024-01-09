@@ -154,8 +154,8 @@ function calculateAmount(){
     let dayOffCoef = 1;
 
     let date = document.getElementById("routeDate").value;
-    DayOff.forEach(date=>{
-        if (date.toString().includes(date)){
+    DayOff.forEach(dateoff=>{
+        if (dateoff.toString().includes(date)){
             dayOffCoef = 1.5;
         }
 
@@ -262,6 +262,63 @@ function applyRouteOptionFilters(){
     }
     updatePagination(1);
     fillRoutesTable();
+}
+
+function createAlert(msg, type){
+    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+    const appendAlert = (message, type) => {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = [
+            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+            `   <div>${message}</div>`,
+            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+            '</div>'
+        ].join('');
+
+        alertPlaceholder.append(wrapper);
+    }
+    appendAlert(msg, type);
+}
+
+function purchaseSubmitButtonClick(){
+    const url = `http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/orders?api_key=${api_key}`;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+    xhr.responseType = "json";
+
+    let order = makeOrderData();
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            createAlert("Экскурсия успешно оформлена!", "success");
+        } else {
+            createAlert("Ошибка при оформлении: " + this.response.error, "danger");
+        }
+    };
+
+    xhr.send(order);
+
+
+}
+
+function makeOrderData(){
+    let order = new FormData();
+
+    const firstOption = document.getElementById("firstOption").checked ? 1 : 0;
+    const secondOption = document.getElementById("secondOption").checked ? 1 : 0;
+
+    order.append("guide_id", currentGuideId);
+    order.append("route_id", currentRouteId);
+    order.append("date", document.getElementById("routeDate").value.toString());
+    order.append("time", document.getElementById("routeStartTime").value.toString());
+    order.append("duration", document.getElementById("routeDuration").value.toString());
+    order.append("persons", document.getElementById("peopleNumber").value.toString());
+    order.append("price", document.getElementById("totalAmount").innerText.toString());
+    order.append("optionFirst", firstOption.toString());
+    order.append("optionSecond", secondOption.toString());
+
+    return order;
 }
 
 function getUniqueObjects() {
