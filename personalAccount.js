@@ -35,10 +35,6 @@ function fillOrdersTable(){
     let tbody = document.getElementById("routesPurchaseBody");
     tbody.innerHTML = "";
 
-    if (allOrdersArray === undefined){
-        getOrders();
-    }
-
     for (let i = 0; i < allOrdersArray.length; i++) {
         let row = tbody.insertRow();
 
@@ -108,19 +104,19 @@ function deleteOrder(id){
     const url = `http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/orders/${id}?api_key=${api_key}`;
 
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", url);
+    xhr.open("DELETE", url);
     xhr.responseType = "json";
 
     xhr.onload = function () {
         if (xhr.status){
             createAlert("Запись успешна удалена!", "success");
+            getOrders();
         } else{
             createAlert("Ошибка при удаление: " + this.response.error, "danger")
         }
     }
 
     xhr.send();
-    getOrders();
 }
 
 function createButton(iconClass, modalId, routeId, guideId, orderId, handler) {
