@@ -87,7 +87,7 @@
     </div>
 
     <!--Modal-->
-    <div class="modal fade" id="purchaseModal">
+    <div class="modal fade" id="orderModal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="background-color: #d2b48c">
                 <div class="modal-header">
@@ -159,8 +159,8 @@
                         <p id="totalAmount" class="m-0 ms-1"></p>
                     </div>
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ОТМЕНИТЬ</button>
-                        <button type="submit" class="btn btn-primary ms-2" onclick="purchaseSubmitButtonClick()" id="modalPurchaseSubmit" data-bs-dismiss="modal">ОТПРАВИТЬ</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modalCancelButton">ОТМЕНИТЬ</button>
+                        <button type="submit" class="btn btn-primary ms-2" onclick="purchaseEditButtonClick()" id="modalPurchaseEdit" data-bs-dismiss="modal">ОТПРАВИТЬ</button>
                     </div>
 
                 </div>
