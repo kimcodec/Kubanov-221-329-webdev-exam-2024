@@ -2,6 +2,7 @@ const api_key = "3556285c-13f0-45b2-b7cf-b39353f1389c"
 let allOrdersArray;
 let AllRoutesArray;
 let currentGuideID;
+let currentOrderID;
 
 let DayOff = [
     "01-01", "01-02", "01-03", "01-04", "01-05", "01-06", "01-07", "01-08",
@@ -93,16 +94,15 @@ function getGuide(id){
     const url = `http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/guides/${id}?api_key=${api_key}`;
 
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", url);
-    xhr.responseType = "json";
+    xhr.open("GET", url, false);
 
     let guide;
 
     xhr.onload = function () {
         if (xhr.status === 200){
-            guide = this.response;
+            guide = JSON.parse(xhr.responseText);
         } else {
-            console.log(xhr.onerror);
+            console.log(xhr.response.error);
         }
     };
 
@@ -130,8 +130,9 @@ function setModalValues(date, time, duration, num, firstOp, secondOP, price){
 }
 
 function lookOrderButtonClick(){
-    currentGuideID = event.currentTarget.getAttribute("order-id");
-    let order = getOrder(currentGuideID);
+    currentGuideID = event.currentTarget.getAttribute("guide-id");
+    currentOrderID = event.currentTarget.getAttribute("order-id");
+    let order = getOrder(currentOrderID);
     setModalValues(order.date, order.time, order.duration, order.persons,
         order.optionFirst, order.optionSecond, order.price);
     disableModal(true);
@@ -140,11 +141,13 @@ function lookOrderButtonClick(){
 }
 
 function editOrderButtonClick(){
-    currentGuideID = event.currentTarget.getAttribute("order-id");
-    let order = getOrder(currentGuideID);
+    currentGuideID = event.currentTarget.getAttribute("guide-id");
+    currentOrderID = event.currentTarget.getAttribute("order-id");
+    let order = getOrder(currentOrderID);
     setModalValues(order.date, order.time, order.duration, order.persons,
         order.optionFirst, order.optionSecond, order.price);
     disableModal(false);
+    checkPeopleNumber();
     document.getElementById("modalCancelButton").style.display = 'block';
     document.getElementById("modalPurchaseEdit").style.display = 'block';
 }
@@ -156,7 +159,8 @@ function deleteOrderButtonClick(){
 }
 
 function purchaseEditButtonClick(){
-
+    updateOrder(currentOrderID);
+    getOrders();
 }
 
 function createAlert(msg, type){
@@ -177,6 +181,27 @@ function createAlert(msg, type){
         }, 5000);
     }
     appendAlert(msg, type);
+}
+
+function updateOrder(id){
+    const url = `http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/orders/${id}?api_key=${api_key}`;
+    let order = getChangeData();
+    console.log(order)
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("PUT", url,);
+    xhr.responseType = "json";
+
+    xhr.onload = function () {
+        if (xhr.status){
+            createAlert("Запись успешна изменена!", "success");
+            getOrders();
+        } else{
+            createAlert("Ошибка при редактировании: " + this.response.error, "danger")
+        }
+    }
+
+    xhr.send(order);
 }
 
 function deleteOrder(id){
@@ -218,12 +243,48 @@ function createButton(iconClass, modalId, routeId, guideId, orderId, handler) {
 }
 
 function checkPeopleNumber(){
-    if (event.target.value > 10){
+    if (parseInt(document.getElementById("peopleNumber").value) > 10){
         document.getElementById("firstOption").disabled = true;
         document.getElementById("firstOption").checked = "";
     } else{
         document.getElementById("firstOption").disabled = false;
     }
+}
+
+function getChangeData(){
+    let order = getOrder(currentOrderID);
+    let changedOrder = new FormData();
+
+    let currentDate = document.getElementById("routeDate").value.toString();
+    let currentTime = document.getElementById("routeStartTime").value.toString();
+    let currentDuration = document.getElementById("routeDuration").value.toString();
+    let currentPersons = document.getElementById("peopleNumber").value.toString();
+    let currentPrice = document.getElementById("totalAmount").innerText.toString();
+    const currentFirstOption = document.getElementById("firstOption").checked ? 1 : 0;
+    const currentSecondOption = document.getElementById("secondOption").checked ? 1 : 0;
+
+    if (currentDate !== order.date.toString()){
+        changedOrder.append("date", currentDate);
+    }
+    if (currentTime !== order.time.toString()){
+        changedOrder.append("time", currentTime);
+    }
+    if (currentDuration !== order.duration.toString()){
+        changedOrder.append("duration", currentDuration);
+    }
+    if (currentPersons !== order.persons.toString()){
+        changedOrder.append("persons", currentPersons);
+    }
+    if (currentPrice !== order.price.toString()){
+        changedOrder.append("price", currentPrice);
+    }
+    if (currentFirstOption != order.optionFirst){
+        changedOrder.append("optionFirst", currentFirstOption);
+    }
+    if (currentFirstOption != order.optionSecond){
+        changedOrder.append("optionSecond", currentSecondOption);
+    }
+    return changedOrder;
 }
 
 function calculateAmount(){
